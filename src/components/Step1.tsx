@@ -61,7 +61,7 @@ const FormikPhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
       {touched[name as keyof FormValues] &&
         errors[name as keyof FormValues] && (
           <div className="text-red-500 text-xs text-end px-2">
-            {errors[name as keyof FormValues]}
+            {errors[name as keyof FormValues]?.toString() || ""}
           </div>
         )}
     </div>
