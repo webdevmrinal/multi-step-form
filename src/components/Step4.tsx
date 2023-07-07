@@ -1,9 +1,16 @@
-import { ErrorMessage, Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, ChangeEvent } from "react";
 
-type Props = {};
-const initialValues = {
+type Props = {
+  onStepChange: (step: number) => void;
+};
+
+interface InitialValues {
+  files: Array<{ type: string; size: number; name: string }>;
+}
+
+const initialValues: InitialValues = {
   files: [],
 };
 
@@ -23,9 +30,9 @@ const validationSchema = Yup.object().shape({
     .required("A file is required"),
 });
 
-function Step3({ onStepChange }: Props) {
-  const uploadButton = useRef(null);
-  const [geoLocationStatus, setGeoLocationStatus] = useState(
+const Step4: React.FC<Props> = ({ onStepChange }: Props) => {
+  const uploadButton = useRef<HTMLInputElement>(null);
+  const [geoLocationStatus, setGeoLocationStatus] = useState<string>(
     "Acquiring coordinates..."
   );
 
@@ -46,9 +53,12 @@ function Step3({ onStepChange }: Props) {
     }
   }, []);
 
-  const onSubmit = (values, { setSubmitting }) => {
+  const onSubmit = (
+    values: InitialValues,
+    { setSubmitting }: FormikHelpers<InitialValues>
+  ) => {
     console.log(values);
-    onStepChange((step) => step + 1);
+    onStepChange(5);
     setSubmitting(false);
   };
 
@@ -71,16 +81,19 @@ function Step3({ onStepChange }: Props) {
                 type="file"
                 accept=".png, .pdf"
                 multiple
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setFieldValue(
-                    "files",
-                    Array.from(event.currentTarget.files).map((file) => ({
-                      type: file.type,
-                      size: file.size,
-                      name: file.name,
-                    }))
-                  );
-                  validateForm();
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  const { files } = event.currentTarget;
+                  if (files) {
+                    setFieldValue(
+                      "files",
+                      Array.from(files).map((file) => ({
+                        type: file.type,
+                        size: file.size,
+                        name: file.name,
+                      }))
+                    );
+                    validateForm();
+                  }
                 }}
               />
               <div className="p-2 h-1/2 border-2 border-dashed rounded-md flex flex-col items-center justify-center gap-5">
@@ -95,8 +108,10 @@ function Step3({ onStepChange }: Props) {
                   className="w-1/2 mx-auto py-2 bg-purple-500 text-white text-xs uppercase rounded-md tracking-[0.3em] hover:bg-purple-600"
                   type="button"
                   onClick={() => {
-                    uploadButton.current.click();
-                    validateForm();
+                    if (uploadButton.current) {
+                      uploadButton.current.click();
+                      validateForm();
+                    }
                   }}
                 >
                   Upload
@@ -126,6 +141,6 @@ function Step3({ onStepChange }: Props) {
       </Formik>
     </div>
   );
-}
+};
 
-export default Step3;
+export default Step4;

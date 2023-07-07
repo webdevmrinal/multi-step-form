@@ -8,13 +8,11 @@ import Step3 from "./Step3";
 import Step4 from "./Step4";
 import Step5 from "./Step5";
 
-type Props = {};
-
-function ProgressBarComponent({}: Props) {
+const ProgressBarComponent: React.FC = () => {
+  const [step, setStep] = useState<number>(1);
   useEffect(() => {
-    toast.success("Login Successful!");
+    if (step === 1) toast.success("Login Successful!");
   }, []);
-  const [step, setStep] = useState(1);
   return (
     <div className="h-screen w-screen bg-purple-300 relative flex items-center justify-center">
       <ToastContainer />
@@ -24,7 +22,7 @@ function ProgressBarComponent({}: Props) {
           percent={((step - 1) / 4) * 100}
         >
           <Step>
-            {({ accomplished }) => (
+            {({ accomplished }: { accomplished: boolean }) => (
               <div
                 className={`indexedStep ${
                   accomplished ? "accomplished" : null
@@ -34,8 +32,9 @@ function ProgressBarComponent({}: Props) {
               </div>
             )}
           </Step>
+
           <Step>
-            {({ accomplished }) => (
+            {({ accomplished }: { accomplished: boolean }) => (
               <div
                 className={`indexedStep ${
                   accomplished ? "accomplished" : null
@@ -46,7 +45,7 @@ function ProgressBarComponent({}: Props) {
             )}
           </Step>
           <Step>
-            {({ accomplished }) => (
+            {({ accomplished }: { accomplished: boolean }) => (
               <div
                 className={`indexedStep ${
                   accomplished ? "accomplished" : null
@@ -57,7 +56,7 @@ function ProgressBarComponent({}: Props) {
             )}
           </Step>
           <Step>
-            {({ accomplished }) => (
+            {({ accomplished }: { accomplished: boolean }) => (
               <div
                 className={`indexedStep ${
                   accomplished ? "accomplished" : null
@@ -68,7 +67,7 @@ function ProgressBarComponent({}: Props) {
             )}
           </Step>
           <Step>
-            {({ accomplished }) => (
+            {({ accomplished }: { accomplished: boolean }) => (
               <div
                 className={`indexedStep ${
                   accomplished ? "accomplished" : null
@@ -80,13 +79,21 @@ function ProgressBarComponent({}: Props) {
           </Step>
         </ProgressBar>
       </div>
-      {step === 1 && <Step1 onStepChange={setStep} />}
-      {step === 2 && <Step2 onStepChange={setStep} />}
-      {step === 3 && <Step3 onStepChange={setStep} />}
-      {step === 4 && <Step4 onStepChange={setStep} />}
-      {step === 5 && <Step5 onStepChange={setStep} />}
+      {step === 1 && (
+        <Step1 onStepChange={(newStep: number) => setStep(newStep)} />
+      )}
+      {step === 2 && (
+        <Step2 onStepChange={(newStep: number) => setStep(newStep)} />
+      )}
+      {step === 3 && (
+        <Step3 onStepChange={(newStep: number) => setStep(newStep)} />
+      )}
+      {step === 4 && (
+        <Step4 onStepChange={(newStep: number) => setStep(newStep)} />
+      )}
+      {step === 5 && <Step5 />}
     </div>
   );
-}
+};
 
 export default ProgressBarComponent;

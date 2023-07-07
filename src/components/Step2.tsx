@@ -1,7 +1,9 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
-type Props = {};
+type Props = {
+  onStepChange: (step: number) => void;
+};
 
 const initialValues = {
   address_1: "",
@@ -21,9 +23,9 @@ const validationSchema = Yup.object().shape({
   country: Yup.string().required("Required"),
 });
 
-function Step2({onStepChange}: Props) {
-  const onSubmit = (values, { setSubmitting }) => {
-    onStepChange((step) => step + 1);
+function Step2({ onStepChange }: Props) {
+  const onSubmit = (_values:any, { setSubmitting }: FormikHelpers<typeof initialValues>) => {
+    onStepChange(3);
     setSubmitting(false);
   };
   return (

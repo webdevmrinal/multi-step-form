@@ -1,10 +1,22 @@
-type Props = {};
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import {
+  ErrorMessage,
+  Field,
+  Form,
+  Formik,
+  FormikHelpers,
+  FieldProps,
+} from "formik";
 import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 
-const intialValues = {
+interface FormValues {
+  username: string;
+  email: string;
+  phone: string;
+}
+
+const intialValues: FormValues = {
   username: "",
   email: "",
   phone: "",
@@ -22,10 +34,17 @@ const validationSchema = Yup.object().shape({
     .required("*required"),
 });
 
-function FormikPhoneNumberInput({ field, form, ...props }) {
+interface PhoneNumberInputProps extends FieldProps {
+  [x: string]: any;
+}
+
+const FormikPhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
+  field,
+  form,
+  ...props
+}) => {
   const { name } = field;
   const { setFieldValue, touched, errors, setFieldTouched } = form;
-  console.log(form);
   return (
     <div>
       <PhoneInput
@@ -33,22 +52,32 @@ function FormikPhoneNumberInput({ field, form, ...props }) {
         defaultCountry="IN"
         value={field.value}
         onChange={(value) => {
-          setFieldValue(field.name, value);
+          setFieldValue(name, value);
           setFieldTouched(name, true, false);
         }}
         onBlur={() => setFieldTouched(name, true, false)}
         {...props}
       />
-      {touched[name] && errors[name] && (
-        <div className="text-red-500 text-xs text-end px-2">{errors[name]}</div>
-      )}
+      {touched[name as keyof FormValues] &&
+        errors[name as keyof FormValues] && (
+          <div className="text-red-500 text-xs text-end px-2">
+            {errors[name as keyof FormValues]}
+          </div>
+        )}
     </div>
   );
+};
+
+interface Step1Props {
+  onStepChange: (step: number) => void;
 }
 
-function Step1({ onStepChange }: Props) {
-  const onSubmit = (values, { setSubmitting }) => {
-    onStepChange((step) => step + 1);
+const Step1: React.FC<Step1Props> = ({ onStepChange }) => {
+  const onSubmit = (
+    _values: FormValues,
+    { setSubmitting }: FormikHelpers<FormValues>
+  ): void => {
+    onStepChange(2);
     setSubmitting(false);
   };
   return (
@@ -113,6 +142,6 @@ function Step1({ onStepChange }: Props) {
       </Formik>
     </div>
   );
-}
+};
 
 export default Step1;
