@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ProgressBar {
+  @apply bg-gray-200; /* Change to desired unfilled color */
+}
+.indexedStep {
+   @apply text-white h-5 w-5 text-xs bg-gray-400 rounded-full flex justify-center items-center
+  }
+  
+  .indexedStep.accomplished {
+    @apply bg-purple-500
+  }

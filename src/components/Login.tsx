@@ -3,7 +3,7 @@ import { Form, Field, Formik, ErrorMessage, FormikHelpers } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Values {
   email: string;
@@ -21,6 +21,7 @@ const validationSchema = Yup.object({
 });
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const onSubmit = async (
     values: Values,
     { setSubmitting }: FormikHelpers<Values>
@@ -32,8 +33,7 @@ const Login: React.FC = () => {
       );
       setSubmitting(false);
       if (response.data.authToken) {
-        toast.success("Login Successful!");
-        console.log(response.data.authToken);
+        navigate("/step");
       } else {
         toast.error("Login Failed");
       }

@@ -3,6 +3,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./components/Login.tsx";
 import ForgotPassword from "./components/ForgotPassword.tsx";
+import ProgressBarComponent from "./components/ProgressBarComponent.tsx";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
   {
     path: "/forgotpassword",
     element: <ForgotPassword />,
+  },
+  {
+    path: "/step",
+    element: <ProgressBarComponent />,
   },
 ]);
 
